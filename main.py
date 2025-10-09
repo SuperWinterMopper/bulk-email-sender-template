@@ -3,12 +3,34 @@ import os
 import smtplib
 import csv, smtplib, ssl, os
 
-message = """Subject: Your grade
+def mentorEmail(name: str):
+    html = """\
+    <html>
+    <body>
+        <p>Hi,<br>
+        Check out the new post on the Mailtrap blog:</p>
+        <p><a href="https://blog.mailtrap.io/2018/09/27/cloud-or-local-smtp-server">SMTP Server for Testing: Cloud-based or Local?</a></p>
+        <p> Feel free to <strong>let us</strong> know what content would be useful for you!</p>
+    </body>
+    </html>
+    """
+    return html
 
-Hi {name}, your grade is {grade}"""
+def menteeEmail(name: str):
+    html = """\
+    <html>
+    <body>
+        <p>Hi,<br>
+        Check out the new post on the Mailtrap blog:</p>
+        <p><a href="https://blog.mailtrap.io/2018/09/27/cloud-or-local-smtp-server">SMTP Server for Testing: Cloud-based or Local?</a></p>
+        <p> Feel free to <strong>let us</strong> know what content would be useful for you!</p>
+    </body>
+    </html>
+    """
+    return html
 
-SMTP_HOST = os.environ.get(SMTP_HOST)
-SMTP_PASSWORD = os.environ.get(SMTP_PASS)
+SMTP_HOST = os.environ.get("SMTP_HOST")
+SMTP_PASSWORD = os.environ.get("SMTP_PASS")
 
 context = ssl.create_default_context()
 with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
@@ -19,7 +41,7 @@ with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
 
         for name, email, grade in reader:
             server.sendmail(
-                from_address,
-                email,
-                message.format(name=name,grade=grade),
+                from_addr=from_address,
+                to_addrs=email,
+                msg=message.format(name=name,grade=grade),
             )
